@@ -1,0 +1,8 @@
+channels:
+  - defaults
+dependencies:
+  - matplotlib=2.0.2=np113py36_0
+  - numpy=1.13.1=py36_0
+  - pip:
+    - pyYAml
+
