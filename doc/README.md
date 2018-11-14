@@ -166,7 +166,7 @@ Create a Virtual Env for Project A
 
 Go into **Project A** directory:
 
-    cd virtualenv_first_step/projectA/
+    cd virtualenv_first_step/resources/projectA/
 
 Create a virtual environment:
 
@@ -230,7 +230,7 @@ Create a Virtual Env for Project B
 
 Create and setup virtual environment:
 
-    cd virtualenv_first_step/projectB
+    cd virtualenv_first_step/resources/projectB
     virtualenv -p $(which python3) venv_b
     source ./venv_b/bin/activate
 ----
@@ -360,7 +360,7 @@ Create a Virtual Env for Conda Project
 
 Go into **Conda Project** directory:
 
-    cd virtualenv_first_step/conda_project/
+    cd virtualenv_first_step/resources/conda_project/
 
 ----
 Try to run the script:
@@ -395,7 +395,7 @@ And `pyYAml` is a pip dependency.
     
 Create the environment:
 
-    conda create -n tuto_env -f ./requirement.yml 
+    conda-env create -n tuto_env -f ./requirement.yml 
 
 Activate the environment:
 
