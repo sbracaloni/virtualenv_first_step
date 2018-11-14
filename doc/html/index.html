@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>reveal-md</title>
+        <link rel="stylesheet" href="./css/reveal.css">
+        <link rel="stylesheet" href="./css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="./css/highlight/zenburn.css">
+        <link rel="stylesheet" href="./css/print/paper.css" type="text/css" media="print">
+
+
+    </head>
+    <body>
+
+        <div class="reveal">
+            <div class="slides"><section  data-markdown><script type="text/template">Python and Virtual Environment
+===============================
+</script></section><section  data-markdown><script type="text/template">Tutorial Prerequisite
+---------------------
+
+All resources for this tutorial are in this git repository:
+
+    git clone https://github.com/sbracaloni/virtualenv_first_step.git
+</script></section><section  data-markdown><script type="text/template">
+A Python **virtual environment** allows to have an **isolated** Python installation.
+That means it is possible to install python modules for a *project A* without any
+side effect on *the project B*.</script></section><section  data-markdown><script type="text/template">Example : Version Conflict
+--------------------------
+```python
+#ProjectA/my_script.py -- Require: module1::1.0.2
+
+import module1
+
+...
+```
+
+```python
+#ProjectB/my_script.py -- Require: module1::2.4.1
+
+import module1
+
+...
+```
+
+If I use the same Python environment for both project, how can say to use version **1.0.2**
+in one case and version **2.4.1** in the other case ???</script></section><section  data-markdown><script type="text/template">Example : Create a minimum requirement file
+---------------------------------------------
+During a project development we used to install several **Python modules**. It is easy to forgot to **add
+them into the requirements** (normally detected during tests step in CI). Or worst, it is easy to forgot 
+to **remove them from requirements** if they are no longer used.
+</script></section><section  data-markdown><script type="text/template">A way to know the minimum module requirements list:
+ 
+ - Remove your Python environment
+ - Create a new empty one
+ - Execute your project or project tests
+ - Install missing modules one by one
+ - Run `pip freeze` to list installed modules and their versions.
+
+> This is impossible without virtual environment because you will destroyed environment for other projects.</script></section><section  data-markdown><script type="text/template">
+There are a lot of tools to create virtual environment in Python:
+
+- pyvenv (Deprecated in Python 3.6)
+- venv
+- virtualenv
+- Conda using Miniconda
+- ...
+
+Here we will talk about **virtualenv** and **Miniconda**.
+</script></section><section  data-markdown><script type="text/template">Pre-requisite 
+--------------
+
+Ensure Python 3 (it is possible to do that with Python 2 but we will not talk about antiquity) is installed on your computer:
+
+    python --version
+   OR
+   
+    python3 --version
+
+    > Python [PYTHON_VERSION]
+    
+Ensure **PYTHON_VERSION** start with **3**. 
+</script></section><section  data-markdown><script type="text/template">Pre-requisite 
+--------------
+
+If it is not the case run: 
+    
+    [Debian Stretch or Ubuntu bionic]
+    sudo apt-get update && sudo apt-get instaill python3 
+   OR
+    
+    [MAC]
+    brew install python3
+</script></section><section  data-markdown><script type="text/template">Pre-requisite 
+--------------
+
+If you wan to install **virtualenv** using pip:
+
+    pip --version
+   OR   
+   
+    pip3 --version
+  
+    > pip [PIP VERSION] from [PIP_INSTALL_PATH] (python [PYTHON_VERSION])
+    
+Ensure **PYTHON_VERSION** start with **3**. 
+</script></section><section  data-markdown><script type="text/template">Pre-requisite 
+--------------
+If it is not the case:
+    
+    [Debian Stretch or Ubuntu bionic]
+    sudo apt-get update && sudo apt-get instaill python3-pip
+   OR        
+   
+    [MAC]
+    brew install python3-pip
+</script></section><section ><section data-markdown><script type="text/template">
+Virtualenv
+-----------
+
+See [documentation](https://virtualenv.pypa.io/en/latest/).
+</script></section><section data-markdown><script type="text/template">
+Install
+-------
+
+Using pip:
+
+    pip install virtualenv
+    
+Using Debian packages:
+    
+    sudo apt-get install virtualenv
+    </script></section><section data-markdown><script type="text/template">    
+Commands
+--------
+
+Create a virtual environment:
+
+    virtualenv -p [path_to_python3] [virtual_env_name]
+    
+    virtualenv -p $(which python3) venv
+    
+Activate a virtual environment:
+
+    source [path_to_created_virtual_env]/bin/activate
+    
+    source ./venv/bin/activate
+    
+Deactivate a virtual environment:
+
+    deactivate
+    </script></section><section data-markdown><script type="text/template">Create a Virtual Env for Project A
+-----------------------------------
+
+Go into **Project A** directory:
+
+    cd virtualenv_first_step/projectA/
+
+Create a virtual environment:
+
+    virtualenv -p $(which python3) venv_a
+    </script></section><section data-markdown><script type="text/template">
+**Optional**: See where your **python3** is located outside the virtual environment:
+
+    which python3
+    
+Activate the virtualenv:
+   
+    source ./venv_a/bin/activate
+    
+    > (venv_a) ~/my_prj/projectA
+    # The '(venv_a)' before the prompt means the virtual environment 'venv_a' is activated.
+
+**Optional**: See where your **python3** is located now you are inside the virtual environment:
+
+    which python3
+
+</script></section><section data-markdown><script type="text/template">
+Try to run the script:
+
+    python3 ./my_script_a.py
+    
+    Traceback (most recent call last):
+      File "./my_script_a.py", line 3, in <module>
+        import yaml
+    ModuleNotFoundError: No module named 'yaml'
+
+An error occurred because *yaml* module is not installed yet.
+</script></section><section data-markdown><script type="text/template">Now the virtual environment is created and activated we can install modules for **Project A**:
+
+    pip install -r ./requirement.txt
+
+See modules in your virtual environment:
+
+        pip freeze
+</script></section><section data-markdown><script type="text/template">Re-run the script:
+
+        python3 ./my_script_a.py
+        
+        Project A works !
+
+Deactivate environment:
+
+        deactivate
+ </script></section><section data-markdown><script type="text/template">
+Create a Virtual Env for Project B
+-----------------------------------
+
+Create and setup virtual environment:
+
+    cd virtualenv_first_step/projectB
+    virtualenv -p $(which python3) venv_b
+    source ./venv_b/bin/activate</script></section><section data-markdown><script type="text/template">
+Try to run the script:
+    
+    python3 ./my_script_b.py
+ 
+    Traceback (most recent call last):
+      File "./my_script_b.py", line 1, in <module>
+        import lxml
+    ModuleNotFoundError: No module named 'lxml'
+    
+Module *lxml* is not installed yet. 
+</script></section><section data-markdown><script type="text/template">Install **Project B** requirements:
+
+    pip install -r ./requirement.txt
+
+Re-run the script:
+
+    python3 ./my_script_b.py
+    
+    Project B works !
+
+See modules in your virtual environment:
+
+    pip freeze
+</script></section><section data-markdown><script type="text/template">Now try to run the **Project A** script:
+
+    cd ../projectA
+    python3 ./my_script_a.py
+    
+    Traceback (most recent call last):
+      File "my_script_a.py", line 3, in <module>
+        import yaml
+    ModuleNotFoundError: No module named 'yaml'
+</script></section><section data-markdown><script type="text/template">
+The error occurred because we still are in the **Project B** virtual environment: "venv_b"
+
+    deactivate
+    source ./venv_a/bin/activate
+    
+    python3 ./my_script_a.py
+    
+    Project A works !
+    </script></section></section><section ><section data-markdown><script type="text/template">Conda / Miniconda
+==================
+
+
+Some **Python modules** are not full Python. They can be Python wrapped on C code for example.
+And C code is OS dependant. To handle those packages and their dependencies it is recommended to
+use a package manager like **Conda**. For more information see [Conda documentation](https://conda.io/docs/)
+</script></section><section data-markdown><script type="text/template">Install Miniconda
+-----------------
+
+    [Debian Stretch or Ubuntu bionic]
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    chmod +x ./Miniconda3-latest-Linux-x86_64.sh
+    ./Miniconda3-latest-Linux-x86_64.sh -b
+    source ~/.bashrc
+   OR
+    
+    [MAC]
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+    chmod +x ./Miniconda3-latest-MacOSX-x86_64.sh
+    ./Miniconda3-latest-MacOSX-x86_64.sh -b
+    source ~/.bashrc
+ 
+Now you can check conda is well installed:
+
+    conda -V
+    </script></section><section data-markdown><script type="text/template">
+Commands
+---------
+
+Create an empty environment:
+
+    conda-env create -n [ENV_NAME]
+
+Create an environment from a Conda requirement file
+    
+    conda-env create -n [ENV_NAME] -f [path_to_requirement.yml]
+    
+Create an environment from a package list
+    
+    conda-env create -n [ENV_NAME] [pkg1 pkg2 ...]
+</script></section><section data-markdown><script type="text/template">Activate environment:
+
+    source activate [ENV_NAME]
+    
+Deactivate environment:
+
+    source deactivate
+
+List environments:
+    
+    conda-env list</script></section><section data-markdown><script type="text/template">Install a package manually (it is recommended to be in an environment):
+
+    conda install [pkg name]
+    
+
+See packages installed in an environment (it must be activated)
+
+    conda-env export
+</script></section><section data-markdown><script type="text/template">
+Create a Virtual Env for Conda Project
+--------------------------------------
+
+
+Go into **Conda Project** directory:
+
+    cd virtualenv_first_step/conda_project/
+</script></section><section data-markdown><script type="text/template">Try to run the script:
+
+    python3 ./my_script.py
+    
+    Traceback (most recent call last):
+      File "./my_script.py", line 3, in <module>
+        import matplotlib.pyplot as plt
+    ModuleNotFoundError: No module named 'matplotlib'
+Some modules are missing.
+</script></section><section data-markdown><script type="text/template"> 
+See requirement.yml file:
+
+```yaml
+
+ channels:
+   - defaults
+ dependencies:
+   - matplotlib=2.0.2=np113py36_0
+   - numpy=1.13.1=py36_0
+   - pip:  - pyYAml
+```
+
+`numpy` and `matplotlib` are conda package dependencies.
+
+And `pyYAml` is a pip dependency.
+</script></section><section data-markdown><script type="text/template">    
+Create the environment:
+
+    conda create -n tuto_env -f ./requirement.yml 
+
+Activate the environment:
+
+    source activate tuto_env
+     
+Re-run the script:
+
+    python3 ./my_script.py
+    
+    </script></section><section data-markdown><script type="text/template">Search a package 
+----------------
+
+Looking for a **Conda** package named **pandas**
+
+    conda search pandas 
+    </script></section><section data-markdown><script type="text/template">Search a package on anaconda
+-----------------------------
+
+Looking for package **libmagic**
+
+    conda search libmagic
+    
+ Nor result from channels **Conda** knows for now. (see `conda info`)
+ </script></section><section data-markdown><script type="text/template">Look for **libmagic** on [Anaconda](https://anaconda.org/).
+
+You can see this package is available on **conda-forge**. Click on the link.
+
+The page describe how to install this package from **conda-forge** channel:
+
+    conda install -c conda-forge libmagic 
+    conda install -c conda-forge/label/gcc7 libmagic 
+    </script></section><section data-markdown><script type="text/template">
+It is also possible to add conda-forge channel to your **Conda** channels list.
+
+
+    conda config --add channels conda-forge
+    
+    
+Check *conda-forge* channel is well added:
+
+    conda info 
+    
+Then now you will have results when you look for **libmagic**
+
+    conda search libmagic</script></section></section></div>
+        </div>
+
+        <script src="./lib/js/head.min.js"></script>
+        <script src="./js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: './lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: './plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: './plugin/zoom-js/zoom.js', async: true },
+              { src: './plugin/notes/notes.js', async: true },
+              { src: './plugin/math/math.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {};
+            options = extend(defaultOptions, options, queryOptions);
+        </script>
+
+
+        <script>
+          Reveal.initialize(options);
+        </script>
+    </body>
+</html>
